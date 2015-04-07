@@ -75,7 +75,8 @@ ylim <- range(c(apply(sims$lpm.me, 2, mean, na.rm = TRUE),
                 apply(sims$mle.me, 2, mean, na.rm = TRUE),
                 apply(sims$pmle.me, 2, mean, na.rm = TRUE)))
 eplot(xlim = mm(sims$x0), ylim = ylim, 
-      xlab = "x", ylab = "Marginal Effect of x on Pr(y = 1)",
+      xlab = "Education", 
+      ylab = "Marginal Effect of Education on Pr(y = 1)",
       ylabpos = 2.8)
 e.mle.me <- apply(sims$mle.me, 2, mean, na.rm = TRUE)
 e.pmle.me <- apply(sims$pmle.me, 2, mean, na.rm = TRUE)
