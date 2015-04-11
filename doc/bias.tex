@@ -133,7 +133,7 @@ urlcolor=darkred % color of external links
 
 \begin{center}
 {\LARGE \textbf{Transformation-Induced Bias}}\\\vspace{2mm}
-{ \textbf{Unbiased Coefficients Do Not Imply Unbiased Quantities of Interest}}\symbolfootnote[1]{All git computer code necessary for replication are available at \href{https://github.com/carlislerainey/transformation-induced-bais}{
+{ \textbf{Unbiased Coefficients Do Not Imply Unbiased Quantities of Interest}}\symbolfootnote[1]{All computer code necessary for replication is available at \href{https://github.com/carlislerainey/transformation-induced-bais}{
 github.com/carlislerainey/transformation-induced-bias}.}
 
 \vspace{5mm}
@@ -169,24 +169,26 @@ I characterize this transformation-induced bias, calculate an approximation, ill
 %\section*{Introduction}
 
 Political scientists use a wide range of statistical models $y_i \sim f(\theta_i)$, where $i \in \{1,..., N\}$ and $f$ represents a probability distribution. 
-The parameter $\theta_i$ is connected to a collection of covariates $X_i$ by alink function $g$, so that $g(\theta_i) = X_i\beta$. 
-The researcher usually estimates $\beta$ with maximum likelihood (ML), and, depending on the choice of $g$ and $f$, these estimates possess might have desirable small sample desirable properties. 
+The parameter $\theta$ is connected to a design matrix $X$ of $k$ explanatory variables and a column of ones by a link function $g$, so that $g(\theta_i) = X_i\beta$. 
+The researcher usually estimates $\beta$ with maximum likelihood (ML), and, depending on the choice of $g$ and $f$, these estimates might have desirable small sample properties. 
 %For example, if the researcher correctly chooses the model $y_i \sim N(X_i\beta, \sigma^2)$, then the ML estimates of $\beta$ are unbiased. 
 ML does not produce unbiased estimates in general, though. 
 For this reason, methodologists frequently use Monte Carlo simulations to assess small sample properties of estimators and provide users with rules of thumb about appropriate sample sizes.
 
-Although methodologists tend to focus on estimating the model coefficients, substantive researchers tend to focus on ``quantities of interest'' \citep{KingTomzWittenberg2000}--\textit{transformations} $\tau$ of the model coefficients. 
+Although methodologists tend to focus on estimating the model coefficients, substantive researchers tend to focus on ``quantities of interest''--\textit{transformations} $\tau$ of the model coefficients \citep{KingTomzWittenberg2000}. 
 Examples include marginal effects, first and second differences, predicted probabilities and expected values, and risk ratios. 
-Fortunately, the invariance properties allows one to calculate estimates of the quantities of interest from the coefficient estimates.
-The invariance property states that if $\hat{\theta}$ is the ML estimate of $\theta$, then for any function $\tau$, the ML estimate of $\tau(\beta)$ is $\tau(\hat{\theta})$ (\citealt[pp. 75-76]{King1989}, and \citealt[pp. 320-321]{CasellaBerger2002}). %King (1998, p. 75-76) writes: 
+Fortunately, the invariance principle allows one to calculate estimates of the quantities of interest from the coefficient estimates.
+The invariance principle states that if $\hat{\theta}$ is the ML estimate of $\theta$, then for any function $\tau$, the ML estimate of $\tau(\beta)$ is $\tau(\hat{\theta})$ (\citealt[pp. 75-76]{King1989}, and \citealt[pp. 320-321]{CasellaBerger2002}). %King (1998, p. 75-76) writes: 
 %\begin{quote}
 %Often researchers prefer to estimate a function of a parameter rather than a parameter itself. The invariance property of ML estimators guarantees that one can estimate either and transform them as needed.
 %\end{quote}
-Of course, if $\hat{\theta}$ is a consistent estimator of $\theta$, then $\tau(\theta)$ is a consistent estimator $\tau(\hat{\theta})$. But the invariance principle raises an important question: Does $\tau(\hat{\theta})$ necessarily inherit desirable small sample properties of $\hat{\theta}$, such as unbiasedness? The answer is no--the estimates of the quantities of interest do not inherit the small sample properties of the coefficient estimates. 
+Of course, if $\hat{\theta}$ is a consistent estimator of $\theta$, then $\tau(\theta)$ is a consistent estimator $\tau(\hat{\theta})$. But the invariance principle raises an important question: Does $\tau(\hat{\theta})$ necessarily inherit desirable small sample properties of $\hat{\theta}$, such as unbiasedness? 
+The answer is no. 
+The estimates of the quantities of interest do not inherit the small sample properties of the coefficient estimates. 
 %Under the assumption the linear model and iid normal errors, least squares estimates have excellent small sample properties (i.e., best unbiased estimator), but quantities of interest calculated from these unbiased coefficient estimates might be strongly biased.
 
-This subtle, but crucial point reveals a disconnect between the work done by methodologists, which tends to focus on coefficients, and the work done by substantive scholars, which tends to focus on a transformations of the coefficients. 
-Much (though certainly not all) of the methodological research that we do implicitly suggests that an approximately unbiased coefficient estimate is necessary and/or sufficient for an approximately unbiased estimate of the quantity of interest. 
+This subtle, but crucial point reveals a disconnect between the work done by methodologists, which tends to focus on coefficients, and the work done by substantive scholars, which tends to focus on transformations of the coefficients. 
+Much (though certainly not all) methodological research implicitly suggests that an approximately unbiased coefficient estimate is necessary and/or sufficient for an approximately unbiased estimate of the quantity of interest. 
 Classically, \cite{Nagler1994} uses Monte Carlo simulations to assess the small sample properties of the scobit model coefficients but focuses on marginal effects and predicted probabilities in his illustrative application. 
 Recently, \cite{Nieman2015} uses simulations to assess the small sample properties of the coefficients in his strategic probit with partial observability, but focuses his illustrative application on predicted probability of civil war. 
 In order to provide more compelling tools for substantive scholars, we must extend our focus beyond coefficients to the quantities that substantive researchers typically care about.
@@ -197,12 +199,13 @@ As a motivating example, consider the log-linear model
 \begin{equation}
 \log (\text{income}_i) = \beta_{cons} + \beta_{edu} \text{education}_i + \epsilon_i \text{,}\nonumber
 \end{equation}
-where $\epsilon_i \sim N(0, \sigma^2)$, education is measured in years, income is measured in thousands of dollars. 
+where $\epsilon_i \sim N(0, \sigma^2)$, education is measured in years, and income is measured in thousands of dollars. 
 Assuming that we use the correct model, then least squares (the ML estimator) provides the best unbiased estimator of the coefficients $\beta_{cons}$ and $\beta_{edu}$. 
-However, we are not nterested in $\log(\text{income})$ directly. Instead, we are interested in income itself, in particular, the median income among those with 20 years of education $\med(\text{income} | \text{education} = 20) = e^{\beta_{cons} + 20\beta_{edu}}$. 
+However, we are not interested in $\log(\text{income})$ directly. Instead, we are interested in income itself, in particular, the median income among those with 20 years of education $\med(\text{income} | \text{education} = 20) = e^{\beta_{cons} + 20\beta_{edu}}$. 
 One might guess that unbiased estimates of $\beta_{cons}$ and $\beta_{edu}$ lead to unbiased estimates of $\med(\text{income} | \text{education} = 20)$, but that is not the case. 
 If we suppose that $N = 10$, $\beta_{cons} = 2.5$, $\beta_{edu} = 0.1$, $\sigma^2 = 1$, and \textit{education} takes on integers roughly uniformly from 10 to 20, then $\tau(\beta_{cons}, \beta_{edu}) = e^{\beta_{cons} + 20\beta_{edu}} \approx \$90k$. 
-To calculate the bias in the quantity of interest, I simulate 100,000 data sets and calculate the quantity of interest for each. 
+To calculate the bias in the estimate of the quantity of interest, though, I simulate 100,000 data sets.
+For each data set, I estimate the model coefficients and use the coefficient estimates to calculate the quantity of interest. 
 Although $\hat{\beta}_{cons}$ and $\hat{\beta}_{edu}$ are unbiased, the estimate of $\med(\text{income} | \text{education} = 20)$ is strongly biased upward, with an expected value of about $\$106k$.
 But how does this simple transformation of unbiased estimates of the coefficients induce such a large bias in the estimate of the quantity of interest?
 
@@ -217,18 +220,17 @@ But substantive researchers care mostly about bias in the quantities of interest
 $\tau$-bias is more complex and subtle than biases in the coefficients. 
 It can be rewritten and decomposed into two components: transformation-induced $\tau$-bias and coefficient-induced $\tau$-bias, so that
 \begin{equation}
-\tau\text{-bias}= \underbrace{ \E[\tau(\hat{\beta})]-  \tau[\E(\hat{\beta})]  }_{\text{transformation-induced}} + \overbrace{  \tau[\E(\hat{\beta})] - \tau(\beta)  }^{\text{coefficient-induced}}\text{.} \nonumber
+total \tau\text{-bias}= \underbrace{ \E[\tau(\hat{\beta})]-  \tau[\E(\hat{\beta})]  }_{\text{transformation-induced}} + \overbrace{  \tau[\E(\hat{\beta})] - \tau(\beta)  }^{\text{coefficient-induced}}\text{.} \nonumber
 \end{equation}
-Any coefficient bias passes through to the quantities of interest in the sense that, if the coefficient estimates are biased, then the transformation of the true coefficient is not equal to the transformation of the average coefficient estimate if the, so that
+Any coefficient bias passes through to the quantities of interest in the sense that, if the coefficient estimates are biased, then the transformation of the true coefficient is not equal to the transformation of the average coefficient estimate, so that
 \begin{equation}
 \text{coefficient-induced } \tau\text{-bias} = \tau[\E(\hat{\beta})] - \tau(\beta) \text{.}\nonumber
 \end{equation}
-Because $g[\E(X)] \neq \E[g(X)]$ in general, 
 But the transformation \textit{itself} introduces bias as well, so that
 \begin{equation}
 \text{transformation-induced } \tau\text{-bias} = \E[\tau(\hat{\beta})]-  \tau[\E(\hat{\beta})] \text{.}\nonumber
 \end{equation}
-The bias occurs because, in general, $g[\E(X)] \neq \E[g(X)]$ for an arbitrary random variable $X$ and function $g$.
+The bias occurs because, in general, $h[\E(X)] \neq \E[h(X)]$ for an arbitrary random variable $X$ and function $h$.
 
 Little methodology research explicitly recognizes this transformation-induced $\tau$-bias and less fully appreciates its importance. 
 Below I offer a general characterization using Jensen's inequality, and approximation to its magnitude, an example that illustrates its significance, and a discussion of its importance to methodological research.
@@ -238,7 +240,7 @@ Below I offer a general characterization using Jensen's inequality, and approxim
 \subsection*{A Characterization}
 
 For strictly convex and strictly concave transformations, Jensen's inequality enables a straightforward characterization of the direction of the transformation-induced $\tau$-bias. 
-This characterization also provides the key intuition for more complicated transformations as well as approximation of the magnitude of the bias.
+This characterization also provides the key intuition for more complicated transformations as well as an approximation of the magnitude of the bias.
 \begin{theorem}
 Suppose a generic (non-degenerate) ML estimator $\hat{\beta}$. Then any strictly convex (concave) $\tau$ creates upward (downward) transformation-induced $\tau$-bias.
 \end{theorem} 
@@ -254,32 +256,41 @@ By similar argument, one can show that for any strictly \textit{concave} $\tau$,
 
 In general, researchers do not restrict themselves to a strictly convex or strictly concave $\tau$. 
 For example, typical transformations of logistic regression coefficients, such as predicted probabilities, first and second differences, marginal effects, and risk ratios, all have both convex regions and concave regions. 
-This situation is much more difficult to characterize generically, given that $\tau(b)$ might contain a mixture of strictly convex and strictly concave regions or at any particular point $b$, the multivariate function $\tau$ might be convex in one direction and concave in another. In general though, the direction of the bias depends on the \textit{location} of the sampling distribution. If most of the sampling distribution is located in a ``mostly concave'' region, then the bias will be downward. If most of the sampling distribution is located in a ``mostly convex'' region, then the bias will be upward. 
+This situation is much more difficult to characterize generically, given that $\tau(b)$ might contain a mixture of strictly convex and strictly concave regions. 
+Making matters even more difficult, at any particular point $b$, the multivariate function $\tau$ might be convex in one direction and concave in another. 
+In general though, the direction of the bias depends on the \textit{location} of the sampling distribution. 
+If most of the sampling distribution is located in a ``mostly concave'' region, then the bias will be downward. 
+If most of the sampling distribution is located in a ``mostly convex'' region, then the bias will be upward. 
 
 \subsection*{An Approximation}
 
 Next, I approximate the magnitude of the the transformation-induced $\tau$-bias using a second-order Taylor expansion. First, notice that $\E[\tau(\hat{\beta})] = \E[\tau(\E[\hat{\beta}] + (\hat{\beta} - \E[\hat{\beta}]))]$. Now approximate the term inside the right-hand expectation with a second order Taylor expansion, so that 
 \small
 \begin{equation}
-E[\tau(\hat{\beta})] \approx \E \left[ \tau[\E(\hat{\beta})] + \displaystyle \sum_{r = 1}^k \dfrac{\partial \tau[\E(\hat{\beta})]}{\partial \beta_r}[\hat{\beta}_r - \E(\hat{\beta}_r)] +  \dfrac{1}{2} \displaystyle \sum_{r = 1}^k \sum_{s = 1}^k \dfrac{\partial^2 \tau[\E(\hat{\beta})]}{\partial \beta_r \beta_s}[\hat{\beta}_r - \E(\hat{\beta}_r)][\hat{\beta}_s - \E(\hat{\beta}_s)] \right ]\nonumber
-%\E[\tau(\hat{\beta})] & \approx \E[\tau(\beta)]  + \dfrac{1}{2} \displaystyle \sum_{r = 1}^k \sum_{s = 1}^k H_{rs} \Sigma_{rs}\text{,} \no number
+E[\tau(\hat{\beta})] \approx \E \left[ \tau[\E(\hat{\beta})] + \displaystyle \sum_{r = 1}^{k+1} \dfrac{\partial \tau[\E(\hat{\beta})]}{\partial \beta_r}[\hat{\beta}_r - \E(\hat{\beta}_r)] +  \dfrac{1}{2} \displaystyle \sum_{r = 1}^{k+1} \sum_{s = 1}^{k+1} \dfrac{\partial^2 \tau[\E(\hat{\beta})]}{\partial \beta_r \beta_s}[\hat{\beta}_r - \E(\hat{\beta}_r)][\hat{\beta}_s - \E(\hat{\beta}_s)] \right ]\nonumber
+%\E[\tau(\hat{\beta})] & \approx \E[\tau(\beta)]  + \dfrac{1}{2} \displaystyle \sum_{r = 1}^{k+1} \sum_{s = 1}^{k+1} H_{rs} \Sigma_{rs}\text{,} \no number
 \end{equation}
 \normalsize
 Taking the expectation of the right-hand side eliminates the middle term and allows expressing the final term as a function of the variance of the sampling distribution, so that 
 \begin{equation}
-\E [\tau(\hat{\beta})] \approx  \tau[\E(\hat{\beta})]  + \dfrac{1}{2} \displaystyle \sum_{r = 1}^k \sum_{s = 1}^k H_{rs} \Sigma_{rs}\text{,} \nonumber
+\E [\tau(\hat{\beta})] \approx  \tau[\E(\hat{\beta})]  + \dfrac{1}{2} \displaystyle \sum_{r = 1}^{k+1} \sum_{s = 1}^{k+1} H_{rs} \Sigma_{rs}\text{,} \nonumber
 \end{equation}
 where $H$ represents the Hessian matrix of second derivatives of $\tau$ at the point $\E(\hat{\beta})$ and, conveniently, $\Sigma$ represents the covariance matrix of the sampling distribution. 
 Rearranging gives an approximation to the magnitude of the transformation-induced $\tau$-bias, so that 
 \begin{equation}\label{eqn:bias}
-\text{transformation-induced } \tau\text{-bias} = \E[\tau(\hat{\beta})] - \tau[\E(\hat{\beta})]  \approx \dfrac{1}{2} \displaystyle \sum_{r = 1}^k \sum_{s = 1}^k H_{rs} \Sigma_{rs}\text{.} \nonumber
+\text{transformation-induced } \tau\text{-bias} = \E[\tau(\hat{\beta})] - \tau[\E(\hat{\beta})]  \approx \dfrac{1}{2} \displaystyle \sum_{r = 1}^{k+1} \sum_{s = 1}^{k+1} H_{rs} \Sigma_{rs}\text{.} \nonumber
 \end{equation}
 If $H$ is constant then the approximation is exact. 
+If $\hat{\beta}$ is unbiased, then $\tau[\E(\hat{\beta})]$ can be replaced with $\tau(\beta)$, so that Equation \ref{en:bias} represents both transformation-induced and the total $\tau$-bias.
 
-Equation \ref{eqn:bias} does not depend on a strictly convex or concave transformation. The approximation is reasonable if $H(\beta)$ resembles the curvature of $\tau$ over most of the sampling distribution. As long as $\tau$ is not highly non-linear (e.g., $\left|\frac{\partial^3 \tau}{\partial \beta_r \partial \beta_s \partial \beta_t}\right| >> 0$), then Equation \ref{eqn:bias} provides a reasonable estimate of the direction and magnitude of the bias.
+Equation \ref{eqn:bias} does not depend on a strictly convex or concave transformation. 
+The approximation is reasonable if $H(\beta)$ resembles the curvature of $\tau$ over most of the sampling distribution. 
+As long as $\tau$ is not highly non-linear (e.g., $\left|\frac{\partial^3 \tau}{\partial \beta_r \partial \beta_s \partial \beta_t}\right| >> 0$), then Equation \ref{eqn:bias} provides a reasonable estimate of the direction and magnitude of the bias.
 
-Equation \ref{eqn:bias} quantifies two intuitions. First, the amount of bias depends on the standard error and/or sample size. As the sample size grows large, $\Sigma$ shrinks to zero, which drives the bias to zero as well. 
-This observation matches the fact that $\tau(\hat{\beta})$ is a consistent estimator of $\tau(\beta)$. 
+Equation \ref{eqn:bias} quantifies two intuitions. 
+First, the amount of bias depends on the standard error and/or sample size. 
+As the sample size grows large, $\Sigma$ shrinks to zero, which drives the bias to zero as well. 
+This matches the previous observation that $\tau(\hat{\beta})$ is a consistent estimator of $\tau(\beta)$. 
 Secondly, the amount of bias depends on the curvature in $\tau$. 
 If $\tau$ is nearly linear so that $H \approx 0$, then the transformation introduces minimal bias. 
 On the other hand, more curvature, so that $H >> 0$, leads to greater bias. 
@@ -300,15 +311,15 @@ Let $\beta_{cons} = -2.5$, $\beta_{edu} = 0.2$, and $N = 30$.
 We are interested in the marginal effect of education. 
 In this case, we might want to calculate the marginal effect of education at a substantively relevant value (e.g., \textit{education} = 12 years or \textit{education} = 16 years), at all observed values, or perhaps average across the observed data \citep{HanmerKalkan2013}.
 
-To assess the bias in the estimators in the coefficients and the marginal effects, I first create a hypothetical variable \textit{education} that takes on 30 integer values roughly uniformly distributed from 10 to 20. 
+To assess the bias in the estimates of the coefficients and the marginal effects, I first create a hypothetical variable \textit{education} that takes on 30 integer values roughly uniformly distributed from 10 to 20. 
 I then simulate 100,000 data sets and compute the coefficients and marginal effects for each data set using ML and penalized ML estimation. 
 As expected, the ML coefficient estimates (intercept and slope) are substantially biased away from zero by about 14\%, while the penalized ML estimates are only biased away from zero by about 1\%.
 
 %But compare the sampling distribution for the quantity of interest $\tau$ calculated using the strongly biased ML estimate $\hat{\beta}^{mle}$ and the essentially unbiased penalized ML estimate $\hat{\beta}^{pmle}$. 
-At first glance, one might guess that the $\tau(\hat{\beta}^{mle})$ would provide a less biased estimate of $\tau(\beta)$ given the substantial bias in the ML coefficient estimates. 
+At first glance, one might guess that the $\tau(\hat{\beta}^{mle})$ would provide a more biased estimate of $\tau(\beta)$ given the substantial bias in the ML coefficient estimates. 
 However, that does not follow. 
-A \textit{more biased} estimate of $\beta$ might lead to a less biased estimate of $\tau(\beta)$ if the coefficient- and transformation-induced $\tau$-bias cancel each other out. 
-Indeed, the two biases do cancel out in this hypothetical example. 
+A \textit{more biased} estimate of $\beta$ might lead to a \textit{less biased} estimate of $\tau(\beta)$ if the coefficient-induced and transformation-induced $\tau$-bias cancel each other out. 
+Indeed, the two biases cancel out in this hypothetical example. 
 Figure \ref{fig:logit-me-bias} shows that, when calculated from the nearly unbiased $\hat{\beta}^{pmle}$, the estimate of the marginal effect of education on the probability of voting is \textit{always} biased downward. 
 On the other hand, marginal effects calculated using the biased coefficient estimate $\hat{\beta}^{mle}$ are sometimes biased downward, sometimes biased upward, and other times biased little. 
 For six of eleven values of education, the biased ML coefficient estimates lead to less biased marginal effects. 
@@ -336,7 +347,7 @@ This fact has important implications for how we study the small sample propertie
 First, it has important implications for the sample sizes that methodologists recommend to substantive researchers. 
 Methodologists usually parameterize models so that the coefficients lie in an unbounded space. 
 This allows the coefficient estimates to rapidly approach their asymptotic distribution, which ensures the estimates have acceptable small sample properties. 
-Substantive researchers, though, usually transform these coefficient estimates into quantities of interest, and the estimate of the quantity of interest does not inherit the small sample properties of the coefficient estimators. 
+Substantive researchers, though, usually transform these coefficient estimates into quantities of interest, and the estimate of the quantity of interest does not inherit the small sample properties of the coefficient estimates. 
 Because the quantity of interest often lies in a bounded space, it might approach its asymptotic distribution more slowly. 
 As a result, substantive researchers might need much larger sample sizes than methodologists usually recommend.
 
@@ -347,7 +358,7 @@ Greater variance in the coefficient estimates lead to increased bias in the quan
 This implies that if an estimator is essentially unbiased, then greater efficiency translates to reduced bias in the quantities of interest. 
 Similarly, small reductions in bias at the expense of large loss in efficiency might lead to greater bias in the quantities of interest. 
 
-As methodologists, we cannot ignore transformation induced bias. Nearly unbiased estimators of coefficients are not enough. We must be aware of the quantities of interest to substantive researchers and calibrate our tools for these quantities.
+As methodologists, we cannot ignore transformation induced bias. Nearly unbiased estimates of coefficients are not enough. We must be aware of the quantities of interest to substantive researchers and calibrate our tools for these quantities.
 
 \singlespace 
 %\newpage
