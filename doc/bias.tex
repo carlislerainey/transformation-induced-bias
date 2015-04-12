@@ -297,47 +297,52 @@ On the other hand, more curvature, so that $H >> 0$, leads to greater bias.
 
 \subsection*{An Example}
 
-Many substantive researchers realize that logistic regression estimates are biased away from zero in small samples. 
-However, fewer realize that a simple penalty applied to the likelihood function can nearly eliminate this bias \citep{Firth1993}. 
-In this example, I illustrate the importance of accounting for transformation-induced bias. 
-I show that obtaining unbiased coefficients can be counterproductive if researchers instead focus on marginal effects.
+Many substantive researchers realize that logistic regression estimates are biased away from zero in small samples and use ``rules of thumb'' to judge whether asymptotic properties, such as asymptotic unbiasedness, apply to a finite sample.
+When non-events outnumber events, one rule of thumb requires ten events per explanatory variable \citep{Peduzzietal1996}. 
+In this example, I illustrate the importance of accounting for transformation-induced bias in Monte Carlo studies. 
+I show that the sample size required for approximately unbiased estimates of marginal effects can be much larger than the sample sizes required for approximately unbiased coefficient estimates.
 
-For concreteness, suppose a model explaining the probability of voting as a function of education
-\begin{equation}
-\Pr (\text{vote}_i) = \text{logit}^{-1(}\beta_{cons} + \beta_{edu} \text{education}_i) \text{,}\nonumber
+For simplicity, I focus on the model $\Pr (y) = \text{logit}^{-1}(\beta_{cons} + \beta_1x_1 + \beta_2x_2 + \beta_3x_3 + \beta_4x_4 \beta_5x_5 + \beta_6x_6)$, where $y$ indicates whether or not observation $i$ equals and the $x_j$ represented fixed explanatory variables that I create by simulating from independent, standard normal distributions. 
+For this simulation, I set $\beta_{cons} = -1$ and $\beta_j =  0.15$ for $j \in \{1, ..., 6\}$. 
+I assume that ``approximately unbiased'' means a bias of less than three percent, where
+\begin{equation}\label{eqn:percent-bias}
+\text{percent bias} = 100 \times \frac{E[\tau(\hat{\beta})] - \tau(\beta)}{\tau(\beta)}\text{.}
 \end{equation}
-where \textit{vote} indicates whether or not citizen $i$ voted in the election and \textit{education} is measured in years. 
-Let $\beta_{cons} = -2.5$, $\beta_{edu} = 0.2$, and $N = 30$. 
-We are interested in the marginal effect of education. 
-In this case, we might want to calculate the marginal effect of education at a substantively relevant value (e.g., \textit{education} = 12 years or \textit{education} = 16 years), at all observed values, or perhaps average across the observed data \citep{HanmerKalkan2013}.
+I vary number of observations $N$ from 100 to 2,500.
+For each sample size, I simulate 100,000 data sets, use each data set to estimate the coefficients, and use the estimated coefficients to calculate the marginal effects.
+I use these 100,000 estimates to calculate the percent bias by Equation \ref{eqn:percent-bias}.
 
-To assess the bias in the estimates of the coefficients and the marginal effects, I first create a hypothetical variable \textit{education} that takes on 30 integer values roughly uniformly distributed from 10 to 20. 
-I then simulate 100,000 data sets and compute the coefficients and marginal effects for each data set using ML and penalized ML estimation. 
-As expected, the ML coefficient estimates (intercept and slope) are substantially biased away from zero by about 14\%, while the penalized ML estimates are only biased away from zero by about 1\%.
+Figure \ref{fig:bias-coef} plots the bias in the coefficients as the sample size increases. The left panel plots the bias in $\hat{\beta}_{cons}$ and the right panel plots and $\hat{\beta}_1$. 
+With $N = 100$, the $\hat{\beta}_{cons}$ and $\hat{\beta}_1$ are biased away from zero by about ten percent. 
+However, this bias drops to about three percent for $N = 250$ and nearly disappears for $N = 2,500$.
+This suggests that as long as events are relatively common (i.e., more than 20\% and less than 80\%, see \citealt{KingZeng2001} for a discussion of rare events data), logistic regression coefficients are nearly unbiased for sample sizes typically encountered in political science.
 
-%But compare the sampling distribution for the quantity of interest $\tau$ calculated using the strongly biased ML estimate $\hat{\beta}^{mle}$ and the essentially unbiased penalized ML estimate $\hat{\beta}^{pmle}$. 
-At first glance, one might guess that the $\tau(\hat{\beta}^{mle})$ would provide a more biased estimate of $\tau(\beta)$ given the substantial bias in the ML coefficient estimates. 
-However, that does not follow. 
-A \textit{more biased} estimate of $\beta$ might lead to a \textit{less biased} estimate of $\tau(\beta)$ if the coefficient-induced and transformation-induced $\tau$-bias cancel each other out. 
-Indeed, the two biases cancel out in this hypothetical example. 
-Figure \ref{fig:logit-me-bias} shows that, when calculated from the nearly unbiased $\hat{\beta}^{pmle}$, the estimate of the marginal effect of education on the probability of voting is \textit{always} biased downward. 
-On the other hand, marginal effects calculated using the biased coefficient estimate $\hat{\beta}^{mle}$ are sometimes biased downward, sometimes biased upward, and other times biased little. 
-For six of eleven values of education, the biased ML coefficient estimates lead to less biased marginal effects. 
-The nearly unbiased penalized ML coefficient estimates lead to less biased marginal effects in only four cases. 
-The remaining case is essentially a tie.
+Figure \ref{fig:bias-me} plots the bias in the estimates of the marginal effects as the sample size increases. The left panel plots the total bias, the middle panel plots the coefficient-induced bias, and the right panel plots the transformation-induced bias.
+Since the marginal effect of $x_1$ varies with $x_1$ itself, I plot the estimates for a range of values of $x_1$. 
+
+
+Two features stand out. 
+First, small sample bias is much larger for the marginal effects than for the coefficients. 
+For $N = 100$, the estimate of the marginal effect is biased by about 75\% when $x = -3$, 50\% when $x = -2$ and 25\% when $x = -1$. 
+Second, the small sample bias in the estimates of the marginal effects descends to zero more slowly than the coefficient estimates.
+While the coefficient estimates were approximately unbiased for about $N = 250$, the estimates of the marginal effects retain substantial bias for this same sample size. 
+Indeed, the bias in the estimates of the marginal effects drops below the 3\% threshold at about $N = 2,500$--more than ten times the rule of thumb that works well for the coefficients. 
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[scale = 0.7]{figs/logit-me-bias.pdf}
-\caption{This figure shows the true marginal effects (solid black circles) and the expected value of the marginal effect estimates calculated from ML coefficient estimates (red circles) and penalized ML estimates (blue triangles). 
-Although the ML coefficient estimates are strongly biased away from zero, they provide less biased estimates of the marginal effects for more than half of the observed values of \textit{education}. 
-And while the penalized ML estimates of the coefficients are essentially unbiased, they provide less biased estimates of the marginal effects in only four of the eleven cases and \textit{always} underestimate the marginal effects.}\label{fig:logit-me-bias}
+\includegraphics[scale = 0.7]{figs/bias-coef.pdf}
+\caption{This figure shows the percent bias for the intercept and coefficient. 
+The rule of thumb requiring ten events per explanatory variable suggests a minimum sample size of about 219. 
+For samples larger than about 250, the bias falls below three percent and it nearly disappears as the sample size approach 2,500.}\label{fig:bias-coef}
 \end{center}
 \end{figure}
 
-If we instead focused only on the marginal effect at \textit{education} = 12 or \textit{education} = 16, then the biased ML coefficient estimates still provides a less biased estimate of the marginal effect. 
-If we follow \cite{HanmerKalkan2013} and average across the marginal effects for the observed data, then the essentially unbiased penalized ML coefficient estimates produce a downward bias of about 10\%. 
-The strongly biased ML coefficient estimates, on the other hand, produce a downward bias of only about 2\%.
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width = \textwidth]{figs/bias-me.pdf}
+\caption{This figure shows the total, coefficient-induced, and transformation-induced $\tau$-bias for the marginal effects. The rule of thumb requiring ten events per explanatory variable suggests a minimum sample size of about 219. However, the bias falls well outside the three percent threshold for this suggested sample size. The estimates fall within the three percent threshold only for sample sizes nearing 2,500--more than ten times the rule of thumb that works well for the coefficients. Also notice that while the coefficient-induced bias receives the most attention from methodologists, the transformation-induced bias is \textit{much} larger.}\label{fig:logit-me-bias}
+\end{center}
+\end{figure}
 
 \subsection*{The Implications}
 
