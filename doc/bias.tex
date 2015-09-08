@@ -50,8 +50,6 @@
 \DeclareMathOperator{\med}{med}
 \DeclareMathOperator*{\E}{\text{E}}
 
-
-
 %Set up fonts the way I like
 \usepackage{tgpagella}
 \usepackage[T1]{fontenc}
@@ -97,6 +95,7 @@
 \usepackage{color}
 \definecolor{darkred}{RGB}{100,0,0}
 
+% set up pdf
 \hypersetup{
 pdftitle={Transformation-Induced Bias}, % title
 pdfauthor={Carlisle Rainey}, % author
@@ -221,7 +220,7 @@ But substantive researchers care mostly about bias in the quantities of interest
 $\tau$-bias is more complex and subtle than biases in the coefficients. 
 It can be rewritten and decomposed into two components: transformation-induced $\tau$-bias and coefficient-induced $\tau$-bias, so that
 \begin{equation}
-total \tau\text{-bias}= \underbrace{ \E[\tau(\hat{\beta})]-  \tau[\E(\hat{\beta})]  }_{\text{transformation-induced}} + \overbrace{  \tau[\E(\hat{\beta})] - \tau(\beta)  }^{\text{coefficient-induced}}\text{.} \nonumber
+\text{total } \tau\text{-bias}= \underbrace{ \E[\tau(\hat{\beta})]-  \tau[\E(\hat{\beta})]  }_{\text{transformation-induced}} + \overbrace{  \tau[\E(\hat{\beta})] - \tau(\beta)  }^{\text{coefficient-induced}}\text{.} \nonumber
 \end{equation}
 Any coefficient bias passes through to the quantities of interest in the sense that, if the coefficient estimates are biased, then the transformation of the true coefficient is not equal to the transformation of the average coefficient estimate, so that
 \begin{equation}
@@ -308,7 +307,7 @@ Many substantive researchers realize that logistic regression estimates are bias
 When non-events outnumber events, one such rule of thumb requires ten events per explanatory variable \citep{Peduzzietal1996}.
 I show that this rule works quite well choosing a sample size that yields approximately unbiased coefficients, but severely underestimates the sample size needed for approximately unbiased estimates of the quantities of interest.
 
-For simplicity, I focus on the model $\Pr (y) = \text{logit}^{-1}(\beta_{cons} + \beta_1x_1 + \beta_2x_2 + \beta_3x_3 + \beta_4x_4 \beta_5x_5 + \beta_6x_6)$, where $y$ indicates whether or not observation $i$ equals and the $x_j$ represented fixed explanatory variables that I create by simulating from independent, standard normal distributions. 
+For simplicity, I focus on the model $\Pr (y) = \text{logit}^{-1}(\beta_{cons} + \beta_1x_1 + \beta_2x_2 + \beta_3x_3 + \beta_4x_4 + \beta_5x_5 + \beta_6x_6)$, where $y$ indicates whether or not observation $i$ equals and the $x_j$ represented fixed explanatory variables that I create by simulating from independent, standard normal distributions. 
 For this simulation, I set $\beta_{cons} = -1$ and $\beta_j =  0.15$ for $j \in \{1, ..., 6\}$. 
 I assume that ``approximately unbiased'' means a bias of less than three percent, where
 \begin{equation}\label{eqn:percent-bias}
