@@ -8,10 +8,11 @@ setwd("~/Dropbox/projects/transformation-induced-bias/")
 # load packages
 library(compactr)
 library(MASS)
+library(scales)
 
-simulate <- function(n, k, b0, b1, n.sims) {
+simulate <- function(n, k, b0, b1, n_sims) {
   # set progress bar
-  pb <- txtProgressBar(min = 0, max = n.sims, style = 3)
+  pb <- txtProgressBar(min = 0, max = n_sims, style = 3)
   # set covariates and probabilty
   rho <- 0.0
   Sigma <- matrix(rho, nrow = k, ncol = k)
@@ -22,34 +23,34 @@ simulate <- function(n, k, b0, b1, n.sims) {
   #X <- cbind(1, x)
   b <- c(b0, b1, rep(.15, k - 1))
   p <- plogis(X%*%b)
-  # set x.hi and x.lo
-  x.hi <- qnorm(0.25)
-  x.lo <- qnorm(0.75)
-  x0 <- c(-3, -2, -1, 0, 1, 2, 3)#seq(-3, 3, length.out = 20)
+  # set x_hi and x_lo
+  x_hi <- qnorm(0.50)
+  x_lo <- qnorm(0.01)
+  x0 <- seq(-3, 3, length.out = 20)
   # true values
-  true.coef <- b1
-  true.int <- b0
-  true.fd <- plogis(b0 + b1*x.hi) - plogis(b0 + b1*x.lo)
-  true.me <- dlogis(b0 + b1*x0)*b1
-  true.pr <- plogis(b0 + b1*x0)
-  true.rr <- plogis(b0 + b1*x.hi)/plogis(b0 + b1*x.lo)
+  true_coef <- b1
+  true_int <- b0
+  true_fd <- plogis(b0 + b1*x_hi) - plogis(b0 + b1*x_lo)
+  true_me <- dlogis(b0 + b1*x0)*b1
+  true_pr <- plogis(b0 + b1*x0)
+  true_rr <- plogis(b0 + b1*x_hi)/plogis(b0 + b1*x_lo)
   # create holders
- mle.int <- mle.coef <- mle.fd <- mle.rr <- prop.ones <- numeric(n.sims)
- mle.me <- mle.pr <- matrix(NA, nrow = n.sims, ncol = length(x0))
-  for (i in 1:n.sims) {
+ mle_int <- mle_coef <- mle_fd <- mle_rr <- prop_ones <- numeric(n_sims)
+ mle_me <- mle_pr <- matrix(NA, nrow = n_sims, ncol = length(x0))
+  for (i in 1:n_sims) {
     # simulate outcome variable
     y <- rbinom(n, 1, p)
-    mle.fit <- glm(y ~ X - 1, family = "binomial")
+    mle_fit <- glm(y ~ X - 1, family = "binomial")
     # mle
-    # mle.fit <- glm(y ~ X - 1, family = "binomial") already done above!
-    mle.int[i] <- coef(mle.fit)[1]  
-    mle.coef[i] <- coef(mle.fit)[2]
-    mle.fd[i] <- plogis(coef(mle.fit)[1] + coef(mle.fit)[2]*x.hi) - 
-      plogis(coef(mle.fit)[1] + coef(mle.fit)[2]*x.lo)
-    mle.me[i, ] <- dlogis(coef(mle.fit)[1] + coef(mle.fit)[2]*x0)*coef(mle.fit)[2]
-    mle.pr[i, ] <- plogis(coef(mle.fit)[1] + coef(mle.fit)[2]*x0)
-    mle.rr[i] <- plogis(coef(mle.fit)[1] + coef(mle.fit)[2]*x.hi)/
-      plogis(coef(mle.fit)[1] + coef(mle.fit)[2]*x.lo)
+    # mle_fit <- glm(y ~ X - 1, family = "binomial") already done above!
+    mle_int[i] <- coef(mle_fit)[1]  
+    mle_coef[i] <- coef(mle_fit)[2]
+    mle_fd[i] <- plogis(coef(mle_fit)[1] + coef(mle_fit)[2]*x_hi) - 
+      plogis(coef(mle_fit)[1] + coef(mle_fit)[2]*x_lo)
+    mle_me[i, ] <- dlogis(coef(mle_fit)[1] + coef(mle_fit)[2]*x0)*coef(mle_fit)[2]
+    mle_pr[i, ] <- plogis(coef(mle_fit)[1] + coef(mle_fit)[2]*x0)
+    mle_rr[i] <- plogis(coef(mle_fit)[1] + coef(mle_fit)[2]*x_hi)/
+      plogis(coef(mle_fit)[1] + coef(mle_fit)[2]*x_lo)
     setTxtProgressBar(pb, i)
   }
   
@@ -57,142 +58,104 @@ simulate <- function(n, k, b0, b1, n.sims) {
            k = k,
            b0 = b0, 
            b1 = b1, 
-           x.hi = x.hi,
-           x.lo = x.lo,
+           x_hi = x_hi,
+           x_lo = x_lo,
            x0 = x0,
-           n.sims = n.sims,
-           true.int = true.int,
-           true.coef = true.coef,
-           e.mle.int = mean(mle.int),
-           e.mle.coef = mean(mle.coef),
-           true.fd = true.fd,
-           e.mle.fd = mean(mle.fd),
-           true.me = true.me,
-           e.mle.me = apply(mle.me, 2, mean),
-           true.pr = true.pr,
-           e.mle.pr = apply(mle.pr, 2, mean),
-           true.rr = true.rr,
-           e.mle.rr = mean(mle.rr),
-           prop.ones = mean(p))
+           n_sims = n_sims,
+           true_int = true_int,
+           true_coef = true_coef,
+           e_mle_int = mean(mle_int),
+           e_mle_coef = mean(mle_coef),
+           true_fd = true_fd,
+           e_mle_fd = mean(mle_fd),
+           true_me = true_me,
+           e_mle_me = apply(mle_me, 2, mean),
+           true_pr = true_pr,
+           e_mle_pr = apply(mle_pr, 2, mean),
+           true_rr = true_rr,
+           e_mle_rr = mean(mle_rr),
+           prop_ones = mean(p))
   return(res)
 }
 
 # # test
 set.seed(6371)
-coef <- int <- fd <- rr <- me <- pr <- 
-  total.tau.bias <- coef.tau.bias <- trans.tau.bias <- NULL
-n <- round(exp(exp(seq(log(log(100)), log(log(2500)), length.out = 10))))
-#n <- c(50, 100, 250,  1000)
+coef <- int <- fd <- rr <- me <- pr <- total_tau_bias_rr <- 
+  total_tau_bias <- coef_tau_bias <- trans_tau_bias <- NULL
+n <- round(exp(exp(seq(log(log(100)), log(log(3000)), length.out = 10))))
 for (i in 1:length(n)) {
   cat(paste("\nWorking on N = ", n[i], "...\n", sep = ""))
-  sims <- simulate(n = n[i], k = 6, b0 = -1, b1 = 0.15, n.sims = 10000)
+  sims <- simulate(n = n[i], k = 6, b0 = -1, b1 = 0.15, n_sims = 100000)
   # intercept
-  int <- c(int, 100*(sims$e.mle.int - sims$true.int)/sims$true.int)
+  int <- c(int, 100*(sims$e_mle_int - sims$true_int)/sims$true_int)
   # coefficient
-  coef <- c(coef, 100*(sims$e.mle.coef - sims$true.coef)/sims$true.coef)
+  coef <- c(coef, 100*(sims$e_mle_coef - sims$true_coef)/sims$true_coef)
+  # risk ratio
+  total_tau_bias_rr <- c(total_tau_bias_rr, 100*(sims$e_mle_rr - sims$true_rr)/sims$true_rr)
+
   # total tau bias
-  total.tau.bias <- rbind(total.tau.bias, 100*(sims$e.mle.me - sims$true.me)/sims$true.me)
+  total_tau_bias_df0 <- data.frame(quantity = "'Total'~tau*'-Bias'",
+                                   me_where = sims$x0, 
+                                   bias = 100*(sims$e_mle_me - sims$true_me)/sims$true_me,
+                                   sample_size = n[i])
+  total_tau_bias <- rbind(total_tau_bias, total_tau_bias_df0)
   # coef-induced tau bias
-  ctb <- dlogis(sims$e.mle.int + sims$e.mle.coef*sims$x0)*sims$e.mle.coef
-  coef.tau.bias <- rbind(coef.tau.bias, 100*(ctb - sims$true.me)/sims$true.me)
-  # trans-induced bias
-  trans.tau.bias <- rbind(trans.tau.bias, 100*(sims$e.mle.me - ctb)/sims$true.me)
+  ctb <- dlogis(sims$e_mle_int + sims$e_mle_coef*sims$x0)*sims$e_mle_coef
+  coef_tau_bias_df0 <- data.frame(quantity = "'Coefficient-Induced'~tau*'-Bias'",
+                                   me_where = sims$x0, 
+                                   bias = 100*(ctb - sims$true_me)/sims$true_me,
+                                   sample_size = n[i])
+  coef_tau_bias <- rbind(coef_tau_bias, coef_tau_bias_df0)
+  # trans-induced tau bias
+  trans_tau_bias_df0 <- data.frame(quantity = "'Transformation-Induced'~tau*'-Bias'",
+                                   me_where = sims$x0, 
+                                   bias = 100*(sims$e_mle_me - ctb)/sims$true_me,
+                                   sample_size = n[i])
+  trans_tau_bias <- rbind(trans_tau_bias, trans_tau_bias_df0)
 }
 
-pdf("doc/figs/bias-coef.pdf", height = 2.5, width = 6.5)
-accept <- 3
-xat <- c(100, 250, 500, 1000, 2500, 5000)
-ylim <- c(1.12, 1)*mm(c(int, coef))
-par(mfrow = c(1, 2), oma = c(3, 3, 1, 1), mar = c(0.5, 0.5, 0.5, 0.5))
-eplot(xlim = c(.98, 1.02)*mm(log(n)), ylim = ylim,
-      ylab = "Percent Bias",
-      xlab = "Sample Size",
-      main = expression(hat(beta)[cons]),
-      xat = log(xat),
-      xticklab = xat
-      #yat = c(-10, -5, 0, 5, 10)
-      )
-# polygon(x = par("usr")[c(1, 2, 2, 1)], 
-#         y = c(accept, accept, -accept, -accept),
-#         col = "grey90",
-#         border = NA)
-abline(h = c(accept, -accept), lty = 2, col = "grey50")
-abline(h = 0, lty = 1, col = "grey50")
-abline(v = log(10*sims$k/sims$prop.ones), lty = 1, col = "grey50")
-lines(log(n), int, lwd = 1.7)
-#text(log(n[1]), int[1], expression(E(hat(beta)[cons])), pos = 2, cex = 0.6)
-text(log(10*sims$k/sims$prop.ones), 
-     .9*(par("usr")[4] - par("usr")[3]) + par("usr")[3],
-     paste("Rule of thumb: N = ", round(10*sims$k/sims$prop.ones), sep = ""),
-     pos = 4, col = "grey50", cex = 0.7)
-aplot(expression(hat(beta)[1]))
-# polygon(x = par("usr")[c(1, 2, 2, 1)], 
-#         y = c(accept, accept, -accept, -accept),
-#         col = "grey90",
-#         border = NA)
-abline(h = c(accept, -accept), lty = 2, col = "grey50")
-abline(h = 0, lty = 1, col = "grey50")
-abline(v = log(10*sims$k/sims$prop.ones), lty = 1, col = "grey50")
-#text()
-lines(log(n), coef, lwd = 1.7)
-#text(log(n[1]), coef[1], expression(E(hat(beta)[x])), pos = 2, cex = 0.6)
-dev.off()
+coef_bias_df <- rbind(data.frame(coef = "hat(beta)[cons]", bias = int, sample_size = n), 
+                   data.frame(coef = "hat(beta)[1]",  bias = coef, sample_size = n))
+me_bias_df <- rbind(total_tau_bias, coef_tau_bias, trans_tau_bias)
 
-pdf("doc/figs/bias-me.pdf", height = 2.5, width = 9)
-par(mfrow = c(1, 3), oma = c(3, 3, 1, 1), mar = c(0.5, 0.5, 0.5, 0.5))
-ylim <- c(1.12, 1)*mm(c(total.tau.bias, coef.tau.bias, trans.tau.bias))
-eplot(xlim = c(.98, 1.02)*mm(log(n)), ylim = ylim,
-      ylab = "Percent Bias",
-      xlab = "Sample Size",
-      main = expression(paste("Total ", tau, "-bais", sep = "")),
-      xat = log(xat),
-      xticklab = xat
-      #yat = c(-10, -5, 0, 5, 10)
-)
-# polygon(x = par("usr")[c(1, 2, 2, 1)], 
-#         y = c(accept, accept, -accept, -accept),
-#         col = "grey90",
-#         border = NA)
-abline(h = c(accept, -accept), lty = 2, col = "grey50")
-abline(h = 0, lty = 1, col = "grey50")
-abline(v = log(10*sims$k/sims$prop.ones), lty = 1, col = "grey50")
-for (i in 1:ncol(total.tau.bias)) {
-  lines(log(n), total.tau.bias[, i], lwd = 1.7)
-  text(log(n[1]), total.tau.bias[1, i], bquote(x[1] == .(sims$x0[i])), 
-       pos = 2 + sign(total.tau.bias[, i]), 
-       cex = 0.6)
-}
-
-aplot(expression(paste("Coefficient-Induced ", tau, "-bais", sep = "")))
-# polygon(x = par("usr")[c(1, 2, 2, 1)], 
-#         y = c(accept, accept, -accept, -accept),
-#         col = "grey90",
-#         border = NA)
-abline(h = c(accept, -accept), lty = 2, col = "grey50")
-abline(h = 0, lty = 1, col = "grey50")
-abline(v = log(10*sims$k/sims$prop.ones), lty = 1, col = "grey50")
-for (i in 1:ncol(total.tau.bias)) {
-  lines(log(n), coef.tau.bias[, i], lwd = 1.7)
-  #text(log(n[1]), coef.tau.bias[1, i], paste("x = ", sims$x0[i], sep = ""), pos = 2, cex = 0.6)
-}
-
-aplot(expression(paste("Transformation-Induced ", tau, "-bais", sep = "")))
-# polygon(x = par("usr")[c(1, 2, 2, 1)], 
-#         y = c(accept, accept, -accept, -accept),
-#         col = "grey90",
-#         border = NA)
-abline(h = c(accept, -accept), lty = 2, col = "grey50")
-abline(h = 0, lty = 1, col = "grey50")
-abline(v = log(10*sims$k/sims$prop.ones), lty = 1, col = "grey50")
-for (i in 1:ncol(total.tau.bias)) {
-  lines(log(n), trans.tau.bias[, i], lwd = 1.7)
-  text(log(n[1]), trans.tau.bias[1, i], bquote(x[1] == .(sims$x0[i])), 
-       pos = 2 + sign(trans.tau.bias[, i]), 
-       cex = 0.6)
-}
-
-dev.off()
+gg <- ggplot(coef_bias_df, aes(x = sample_size, y = bias)) + 
+  geom_hline(yintercept = c(3, -3), linetype = "dashed") + 
+  geom_vline(xintercept = ceiling(60/sims$prop_ones), linetype = "dotted") + 
+  annotate(geom = "text", 
+           x = ceiling(60/sims$prop_ones), 
+           y = Inf, 
+           label = paste("N = ", ceiling(60/sims$prop_ones)),
+           hjust = -0.1,
+           vjust = 1.5,
+           size = 3) + 
+  geom_line() + 
+  facet_grid(~ coef, labeller = "label_parsed") +
+  labs(x = "Sample Size",
+       y = "Percent Bias",
+       title = "Bias in Logistic Regression Coefficients")
+ggsave("doc/figs/bias-coef.pdf", gg, height = 3, width = 7)
 
 
+gg <- ggplot(me_bias_df, aes(x = sample_size, y = bias, group = me_where, color = me_where)) + 
+  geom_hline(yintercept = c(3, -3), linetype = "dashed") + 
+  geom_vline(xintercept = ceiling(60/sims$prop_ones), linetype = "dotted") + 
+  annotate(geom = "text", 
+           x = ceiling(60/sims$prop_ones), 
+           y = Inf, 
+           label = paste("N = ", ceiling(60/sims$prop_ones)),
+           hjust = -0.1,
+           vjust = 1.5,
+           size = 3) + 
+  geom_line() + 
+  facet_grid(~ quantity, labeller = "label_parsed") +
+  scale_color_gradient2(high = "#40004b",
+                        mid = "#f7f7f7",
+                        low = "#00441b",
+                        midpoint = 0) +
+  labs(x = "Sample Size",
+       y = "Percent Bias",
+       title = expression(paste(tau, "-Bias for Marginal Effects")),
+       color = "Marginal Effect")
+ggsave("doc/figs/bias-me.pdf", gg, height = 4, width = 10)
 
 
