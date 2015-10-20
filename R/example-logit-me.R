@@ -6,9 +6,9 @@ rm(list = ls())
 setwd("~/Dropbox/projects/transformation-induced-bias/")
 
 # load packages
-library(compactr)
 library(MASS)
 library(scales)
+library(ggplot2)
 
 simulate <- function(n, k, b0, b1, n_sims) {
   # set progress bar
@@ -155,7 +155,7 @@ gg <- ggplot(me_bias_df, aes(x = sample_size, y = bias, group = me_where, color 
   labs(x = "Sample Size",
        y = "Percent Bias",
        title = expression(paste(tau, "-Bias for Marginal Effects")),
-       color = "Marginal Effect")
-ggsave("doc/figs/bias-me.pdf", gg, height = 4, width = 10)
+       color = expression(x[1]))
+ggsave("doc/figs/bias-me.pdf", gg, height = 3, width = 10)
 
 
