@@ -316,6 +316,15 @@ For $N = 100$, $\hat{\beta}_{cons}$ and $\hat{\beta}_1$ are biased away from zer
 However, this bias drops to about three percent for $N = 250$ and nearly disappears for $N = 2,500$. 
 The rule of thumb works well; the bias is negligible for about $N = 219$.
 
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale = 0.7]{figs/bias-coef.pdf}
+\caption{This figure shows the percent bias for the intercept and coefficient for $x_1$. 
+The rule of thumb requiring ten events per explanatory variable suggests a minimum sample size of about 219. 
+For samples larger than about 250, the bias falls below three percent and it nearly disappears as the sample size approach 2,500.}\label{fig:bias-coef}
+\end{center}
+\end{figure}
+
 Figure \ref{fig:bias-me} shows the bias in the estimates of the marginal effects as the sample size increases. 
 The left panel shows the total bias, the middle panel shows the coefficient-induced bias, and the right panel shows the transformation-induced bias.
 Since the marginal effect of $x_1$ varies with $x_1$ itself, I plot the estimates for a range of values of $x_1$. 
@@ -326,15 +335,6 @@ For $N = 100$, the estimate of the marginal effect is biased by about -75\% for 
 Second, the small sample bias in the estimates of the marginal effects descends to zero more slowly than the coefficient estimates.
 While the coefficient estimates are approximately unbiased for about $N = 250$, the estimates of the marginal effects retain substantial bias. 
 Indeed, the bias in the estimates of the marginal effects drops below the 3\% threshold at about $N = 2,500$---more than ten times the rule of thumb that works well for the coefficients. 
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[scale = 0.7]{figs/bias-coef.pdf}
-\caption{This figure shows the percent bias for the intercept and coefficient for $x_1$. 
-The rule of thumb requiring ten events per explanatory variable suggests a minimum sample size of about 219. 
-For samples larger than about 250, the bias falls below three percent and it nearly disappears as the sample size approach 2,500.}\label{fig:bias-coef}
-\end{center}
-\end{figure}
 
 \begin{figure}[h!]
 \begin{center}
