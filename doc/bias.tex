@@ -187,6 +187,11 @@ But the invariance principle raises an important question: Does $\tau(\hat{\beta
 The answer is no; the estimates of the quantities of interest do \underline{not} inherit the small sample properties of the coefficient estimates. 
 For example, a sample size of $N = 250$ that produces nearly unbiased coefficient estimates for a probit model can lead to bias in the marginal effect estimates of 25\% or more.
 
+As another example, methodologists often point out the optimal small-sample properties of least squares estimators under the normal-linear model. 
+Indeed, under the normal linear model, least squared estimators are the best unbiased estimator. 
+However, many substantive researchers use a simple log-transformation, so that $\log(y) \sim N(X\beta, \sigma^2)$.
+And while the coefficients retain their optimal properties, several substantively interesting functions of the coefficients, such as the expected value of $y$, the expected change in $y$ for a given change in $X$, and the marginal effect of an explanatory variable on the expected value of $y$, do not inherit these properties. 
+
 This subtle, yet crucial, point reveals a disconnect between the work done by substantive scholars and that done by methodologists. 
 Methodological work tends to focus on obtaining excellent estimates of the model coefficients, while substantive research tends to focus on estimating quantities of interest. 
 
