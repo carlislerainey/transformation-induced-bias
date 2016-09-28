@@ -1,7 +1,4 @@
 
-# load packages
-library(compactr)
-
 # set seed
 set.seed(43782)
 
@@ -32,9 +29,9 @@ plot(educ, inc)
 
 # calculate monte carlo statistics
 par(mfrow = c(1, 4))
-hist(b0.hat)
-hist(b1.hat)
-hist(q.hat)
+#hist(b0.hat)
+#hist(b1.hat)
+#hist(q.hat)
 true.q <- exp(b_cons + b_educ*x0)
 true.q
 mean(b0.hat)

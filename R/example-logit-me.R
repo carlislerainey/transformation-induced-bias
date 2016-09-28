@@ -2,9 +2,6 @@
 # clear working directory
 rm(list = ls())
 
-# set working directory
-setwd("~/Dropbox/projects/transformation-induced-bias/")
-
 # load packages
 library(MASS)
 library(scales)
@@ -118,44 +115,7 @@ coef_bias_df <- rbind(data.frame(coef = "hat(beta)[cons]", bias = int, sample_si
                    data.frame(coef = "hat(beta)[1]",  bias = coef, sample_size = n))
 me_bias_df <- rbind(total_tau_bias, coef_tau_bias, trans_tau_bias)
 
-gg <- ggplot(coef_bias_df, aes(x = sample_size, y = bias)) + 
-  geom_hline(yintercept = c(3, -3), linetype = "dashed") + 
-  geom_vline(xintercept = ceiling(60/sims$prop_ones), linetype = "dotted") + 
-  annotate(geom = "text", 
-           x = ceiling(60/sims$prop_ones), 
-           y = Inf, 
-           label = paste("N = ", ceiling(60/sims$prop_ones)),
-           hjust = -0.1,
-           vjust = 1.5,
-           size = 3) + 
-  geom_line() + 
-  facet_grid(~ coef, labeller = "label_parsed") +
-  labs(x = "Sample Size",
-       y = "Percent Bias",
-       title = "Bias in Logistic Regression Coefficients")
-ggsave("doc/figs/bias-coef.pdf", gg, height = 3, width = 7)
-
-
-gg <- ggplot(me_bias_df, aes(x = sample_size, y = bias, group = me_where, color = me_where)) + 
-  geom_hline(yintercept = c(3, -3), linetype = "dashed") + 
-  geom_vline(xintercept = ceiling(60/sims$prop_ones), linetype = "dotted") + 
-  annotate(geom = "text", 
-           x = ceiling(60/sims$prop_ones), 
-           y = Inf, 
-           label = paste("N = ", ceiling(60/sims$prop_ones)),
-           hjust = -0.1,
-           vjust = 1.5,
-           size = 3) + 
-  geom_line() + 
-  facet_grid(~ quantity, labeller = "label_parsed") +
-  scale_color_gradient2(high = "#40004b",
-                        mid = "#f7f7f7",
-                        low = "#00441b",
-                        midpoint = 0) +
-  labs(x = "Sample Size",
-       y = "Percent Bias",
-       title = expression(paste(tau, "-Bias for Marginal Effects")),
-       color = expression(x[1]))
-ggsave("doc/figs/bias-me.pdf", gg, height = 3, width = 10)
-
-
+# save simulation data
+saveRDS(coef_bias_df, "data/mc-sims/logit-sims-coefs.RData")
+saveRDS(me_bias_df, "data/mc-sims/logit-sims-mes.RData")
+saveRDS(sims, "data/mc-sims/logit-sims-output.RData")

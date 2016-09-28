@@ -132,11 +132,11 @@ urlcolor=blue % color of external links
 
 \begin{center}
 {\LARGE \textbf{Transformation-Induced Bias}}\\\vspace{2mm}
-{ \textbf{Unbiased Coefficients Do Not Imply Unbiased Quantities of Interest}}\symbolfootnote[1]{All computer code necessary for replication is available at \href{https://github.com/carlislerainey/transformation-induced-bais}{github.com/carlislerainey/transformation-induced-bias}.}
+{ \textbf{Unbiased Coefficients Do Not Imply Unbiased Quantities of Interest}}%\symbolfootnote[1]{All computer code necessary for replication is available at \href{https://github.com/carlislerainey/transformation-induced-bais}{github.com/carlislerainey/transformation-induced-bias}.}
 
 \vspace{5mm}
 
-Carlisle Rainey\symbolfootnote[2]{Carlisle Rainey is Assistant Professor of Political Science, Texas A\&M University, 2010 Allen Building, College Station, TX, 77843 (\href{mailto:crainey@tamu.edu}{crainey@tamu.edu}).}
+%Carlisle Rainey\symbolfootnote[2]{Carlisle Rainey is Assistant Professor of Political Science, Texas A\&M University, 2010 Allen Building, College Station, TX, 77843 (\href{mailto:crainey@tamu.edu}{crainey@tamu.edu}).}
 \end{center}
 
 \vspace{5mm}
@@ -147,7 +147,7 @@ Carlisle Rainey\symbolfootnote[2]{Carlisle Rainey is Assistant Professor of Poli
 Political scientists commonly focus on quantities of interest computed from model coefficients rather than on the coefficients themselves. 
 However, the quantities of interest, such as predicted probabilities, first differences, and marginal effects, do necessarily not inherit the small sample properties of the coefficient estimates. 
 Indeed, unbiased coefficients estimates are neither necessary nor sufficient for unbiased estimates of the quantities of interest. 
-I characterize this transformation-induced bias, calculate an approximation, illustrate its importance with a hypothetical example, and discuss its importance to methodological research.
+I characterize this transformation-induced bias, calculate an approximation, illustrate its importance with two simulation studies, and discuss its relevance to methodological research.
  \end{quote}
 
 % Add quote to first page
@@ -168,16 +168,16 @@ I characterize this transformation-induced bias, calculate an approximation, ill
 
 Political scientists use a wide range of statistical models $y_i \sim f(\theta_i)$, where $i \in \{1,..., N\}$ and $f$ represents a probability distribution. 
 The parameter $\theta_i$ is connected to a design matrix $X$ of $k$ explanatory variables and a column of ones by a link function $g$, so that $g(\theta_i) = X_i\beta$. 
-For example, for the binary logit, $f$ represents the Bernoulli probability mass function, $g$ represents the logit function.
+In the binary logit, for example, $f$ represents the Bernoulli probability mass function and $g$ represents the logit function, so that $y_i \sim \text{Bernoulli}(\pi_i)$ and $\pi_i = \text{logit}^{-1}(X_i\beta)$.
 
 The researcher usually estimates $\beta$ with maximum likelihood (ML), and, depending on the choice of $g$ and $f$, the estimate $\hat{\beta}$ might have desirable small sample properties. 
 However, ML does not produce unbiased estimates in general. 
 For this reason, methodologists frequently use Monte Carlo simulations to assess the small sample properties of estimators and provide users with rules of thumb about appropriate sample sizes.
 For example, the ML estimates of $\beta$ for the binary logit are biased away from zero, leading \citet[p. 54]{Long1997} to suggest that ``it is risky to use ML with samples smaller than 100, while samples larger than 500 seem adequate.''
 
-Although methodologists tend to focus on estimating the model coefficients, substantive researchers tend to focus on a ``quantity of interest.'' 
+Although methodologists tend to focus on estimating model coefficients, substantive researchers tend to focus on some other quantity of interest.
 A quantity of interest is simply a \textit{transformation} $\tau$ of the model coefficients. 
-Examples include marginal effects, first and second differences, predicted probabilities and expected values, and risk ratios \citep{KingTomzWittenberg2000}. 
+Examples include marginal effects, first and second differences, predicted probabilities and expected values, and risk ratios \citep{KingTomzWittenberg2000}.
 
 Fortunately, the invariance principle allows the researcher to calculate estimates of the quantities of interest from the coefficient estimates in a principled manner.
 The invariance principle states that if $\hat{\beta}$ is the ML estimate of $\beta$, then for any function $\tau$, the ML estimate of $\tau(\beta)$ is $\tau(\hat{\beta})$ (\citealt[pp. 75-76]{King1989}, and \citealt[pp. 320-321]{CasellaBerger2002}).
@@ -185,6 +185,7 @@ That is, researchers can simply transform the ML estimates of the model coeffici
 Of course, if $\hat{\beta}$ is a consistent estimator of $\beta$, then $\tau(\hat{\beta})$ must be a consistent estimator of $\tau(\beta)$. 
 But the invariance principle raises an important question: Does $\tau(\hat{\beta})$ inherit the small sample properties of $\hat{\beta}$, such as unbiasedness or approximate unbiasedness?
 The answer is no; the estimates of the quantities of interest do \underline{not} inherit the small sample properties of the coefficient estimates. 
+For example, a sample size of $N = 250$ that produces nearly unbiased coefficient estimates for a probit model can lead to bias in the marginal effect estimates of 25\% or more.
 
 This subtle, yet crucial, point reveals a disconnect between the work done by substantive scholars and that done by methodologists. 
 Methodological work tends to focus on obtaining excellent estimates of the model coefficients, while substantive research tends to focus on estimating quantities of interest. 
@@ -192,7 +193,12 @@ Methodological work tends to focus on obtaining excellent estimates of the model
 Much methodological research implicitly suggests that an approximately unbiased coefficient estimate is necessary and/or sufficient for an approximately unbiased estimate of the quantity of interest. 
 Classically, \cite{Nagler1994} uses Monte Carlo simulations to assess the small sample properties of the scobit model coefficients, but he focuses on marginal effects and predicted probabilities in his illustrative application. 
 Recently, \cite{Nieman2015} uses simulations to assess the small sample properties of the coefficients in his strategic probit with partial observability, but he focuses his illustrative application on the predicted probability of civil war. 
-In order to provide more compelling tools for substantive scholars, we must extend our evaluations beyond coefficient estimates to the quantities that substantive researchers typically care about.
+In order to provide more compelling tools for substantive scholars, methodologists must extend their evaluations beyond coefficient estimates to the quantities that substantive researchers typically care about. 
+
+However, the quantities of interest and likely parameter values vary dramatically across substantive applications, making it difficult or impossible for methodologists to formulate general claims about the behavior of the estimators of potential quantities of interest. 
+Therefore, substantive researchers must not shy away from studying the behavior of their chosen estimators in particular application, especially given their deep knowledge of the underlying political processes, the appropriate quantities of interest, and the substantive importance of any biases.
+Particularly with small sample sizes, large standard errors, and/or highly nonlinear transformations, substantive scholars should consider application-specific simulations to assess the potential for bias.
+Closing the gap between methodological and substantive research requires mindful methodological work from both methodologists and substantive scholars.
 
 \subsection*{The Concepts}
 
@@ -206,19 +212,13 @@ However, the researcher is not likely interested in $\log(\text{income})$, but i
 In particular, she might want to estimate the median income among those with 20 years of education $\med(\text{income} ~|~ \text{education} = 20) = e^{\beta_{cons} + 20\beta_{edu}}$. 
 Because $\med[\log(y)] = \log[\med(y)]$ for a random variable $y$, one might guess that unbiased estimates of $\beta_{cons}$ and $\beta_{edu}$ lead to unbiased estimates of $\med(\text{income} ~|~ \text{education} = 20)$, but that is not the case. 
 If we suppose that $N = 10$, $\beta_{cons} = 2.5$, $\beta_{edu} = 0.1$, $\sigma^2 = 1$, and education takes on integers roughly uniformly from 10 to 20, then $\tau(\beta_{cons}, \beta_{edu}) = e^{\beta_{cons} + 20\beta_{edu}} \approx \$90k$. 
-To calculate the bias in the estimate of the quantity of interest, though, I simulate 100,000 data sets.
-For each data set, I estimate the model coefficients and use the coefficient estimates to calculate the quantity of interest. 
-Although $\hat{\beta}_{cons}$ and $\hat{\beta}_{edu}$ are unbiased, the estimate of $\med(\text{income} ~|~ \text{education} = 20)$ is strongly biased upward, so that $\E[\tau(\hat{\beta}_{cons}, \hat{\beta}_{edu})] = E(e^{\hat{\beta}_{cons} + 20\hat{\beta}_{edu}}) \approx \$106k$.
+A simple Monte Carlo simulation, though, shows that although $\hat{\beta}_{cons}$ and $\hat{\beta}_{edu}$ are unbiased, the estimate of $\med(\text{income} ~|~ \text{education} = 20)$ is strongly biased upward, so that $\E[\tau(\hat{\beta}_{cons}, \hat{\beta}_{edu})] = E(e^{\hat{\beta}_{cons} + 20\hat{\beta}_{edu}}) \approx \$106k$.
 
 A similar, but conceptually distinct issue arrises when researchers want to calculate the \textit{mean} from a log-linear model $\log(y) = X\beta + \epsilon$. 
-Many textbooks highlight that $\E[\log(y|X)] \neq \log[\E(y|X)]$, so that $\E(y | X_i) \neq e^{X_i\beta}$ (e.g., \citealt{Wooldridge2013}). 
+Many textbooks highlight that $\E[\log(y|X)] \neq \log[\E(y|X)]$, so that $\E(y | X_i) \neq e^{X_i\beta}$ (e.g., \citealt[pp. 212-215]{Wooldridge2013}). 
 This inequality follows from a transformation of the random component of the model (i.e., $\epsilon_i$). 
 Even if the model coefficients $\beta$ are \textit{known}, then this inequality holds. 
-But researchers can easily avoid this issue by using the correct transformation $\E(y | X_i) = e^{X_i\beta + \frac{\sigma^2}{2}}$ (assuming for simplicity that $\sigma$ is known).
-
-However, the bias that interests me flows from a transformation of the \textit{model coefficients}. 
-Even if the researcher uses the correct transformation $\hat{\tau} = \E(\text{income}~|~\text{education} = 20) = e^{\hat{\beta}_{cons} + 20\hat{\beta}_{edu} + \frac{\sigma^2}{2}}$ (again assuming that $\sigma$ is known), then $\hat{\tau}$ is biased. 
-That is, even when using the correct transformation, unbiased estimates of the model coefficients do not guarantee unbiased quantities of interest.
+But researchers can easily avoid this issue by using the correct transformation $\E(y | X_i) = e^{X_i\beta + \frac{\sigma^2}{2}}$. However, the bias that interests me flows from a transformation of the \textit{model coefficients}---even if the researcher uses the correct transformation, then $\hat{\tau}$ is biased. 
 
 But how does a simple transformation of unbiased coefficient estimates induce a large bias in the estimate of the quantity of interest?
 We usually think about bias as occurring in the model coefficients $\beta$, so that 
@@ -246,7 +246,7 @@ But the transformation \textit{itself} introduces bias as well, so that
 Transformation-induced bias occurs because, in general, $h[\E(y)] \neq \E[h(y)]$ for an arbitrary random variable $y$ and function $h$.
 
 Little methodology research explicitly recognizes this transformation-induced $\tau$-bias and less fully appreciates its practical importance. 
-Methodologists must become more conscientious of transformation-induced bias; $\tau$-bias can be much larger than coefficient-induced bias and disappear more slowly as the sample size increases.
+Both methodologists and substantive researchers must become more conscientious of transformation-induced $\tau$-bias, which can be much larger than coefficient bias and disappear more slowly as the sample size increases.
 
 \subsection*{A Characterization}
 
@@ -266,11 +266,11 @@ Because $\E[\tau(\hat{\beta})] - \tau[\E(\hat{\beta})] > 0$, the transformation-
 By similar argument, one can show that for any strictly \textit{concave} $\tau$, $\E[\tau(\hat{\beta})] - \tau[\E(\hat{\beta})] > 0$ and that the transformation-induced $\tau$-bias is downward. $\blacksquare$
 \end{proof}
 
-In general, researchers do not restrict themselves to a strictly convex or strictly concave $\tau$. 
-For example, typical transformations of logistic regression coefficients, such as predicted probabilities, first and second differences, marginal effects, and risk ratios, all have both convex regions and concave regions. 
+In general, researchers do not restrict themselves to a strictly convex or strictly concave $\tau$.  
 This situation is much more difficult to characterize generally because $\tau(b)$ might contain a mixture of convex and concave regions. 
+For example, typical transformations of logistic regression coefficients, such as predicted probabilities, first and second differences, marginal effects, and risk ratios, all have both convex regions and concave regions.
 Making matters even more difficult, at any particular point $b$, the multivariate function $\tau$ might be convex in one direction and concave in another. 
-In general though, the direction of the bias depends on the \textit{location} of the sampling distribution. 
+In general, though, the direction of the bias depends on the \textit{location} of the sampling distribution. 
 But the intuition from Theorem \ref{thm:direction} is clear.
 If most of the sampling distribution is located in a mostly concave region, then the bias will be downward. 
 If most of the sampling distribution is located in a mostly convex region, then the bias will be upward.\footnote{One might wonder about the relevance of these ideas to Bayesian analyses. 
@@ -316,7 +316,7 @@ On the other hand, more curvature, so that $H >> 0$, leads to a large bias.
 
 \subsection*{Two Monte Carlo Simulations}
 
-The following two Monte Carlo studies illustrate the importance of accounting for transformation-induced bias in Monte Carlo studies of estimators. 
+But does this bias matter in practice? The following two Monte Carlo studies illustrate the importance of accounting for transformation-induced bias when evaluating estimators. 
 Approximately unbiased coefficients are not enough---one must assess the bias in the quantities of interest as well. 
 
 \subsubsection*{A Hypothetical Model}
@@ -331,12 +331,12 @@ I assume that ``approximately unbiased'' means a bias of less than three percent
 \begin{equation}\label{eqn:percent-bias}
 \text{percent bias} = 100 \times \frac{E[\tau(\hat{\beta})] - \tau(\beta)}{\tau(\beta)}\text{.}
 \end{equation}
-I vary number of observations $N$ from 100 to 2,500, and, for each sample size, I simulate 100,000 data sets, use each data set to estimate the coefficients, and use the estimated coefficients to calculate the marginal effects.
+I vary number of observations $N$ from 100 to 3,000, and, for each sample size, I simulate 100,000 data sets, use each data set to estimate the coefficients, and use the estimated coefficients to calculate the marginal effects.
 I use these 100,000 estimates to calculate the percent bias given by Equation \ref{eqn:percent-bias}.
 
-Figure \ref{fig:bias-coef} shows the bias in the coefficients as the sample size increases. The left panel shows the bias in $\hat{\beta}_{cons}$ and the right panel shows the bias $\hat{\beta}_1$. 
+Figure \ref{fig:bias-coef} shows the bias in the coefficients as the sample size increases. The left panel shows the bias in $\hat{\beta}_{cons}$ and the right panel shows the bias in $\hat{\beta}_1$. 
 For $N = 100$, $\hat{\beta}_{cons}$ and $\hat{\beta}_1$ are biased away from zero by about ten percent. 
-However, this bias drops to about three percent for $N = 250$ and nearly disappears for $N = 2,500$. 
+However, this bias drops to about three percent for $N = 250$ and nearly disappears for $N = 3,000$. 
 The rule of thumb works well; the bias is negligible for about $N = 219$.
 
 \begin{figure}[h!]
@@ -344,7 +344,7 @@ The rule of thumb works well; the bias is negligible for about $N = 219$.
 \includegraphics[scale = 0.7]{figs/bias-coef.pdf}
 \caption{This figure shows the percent bias for the intercept and coefficient for $x_1$. 
 The rule of thumb requiring ten events per explanatory variable suggests a minimum sample size of about 219. 
-For samples larger than about 250, the bias falls below three percent and it nearly disappears as the sample size approach 2,500.}\label{fig:bias-coef}
+For samples larger than about 250, the bias falls below three percent and it nearly disappears as the sample size approach 3,000.}\label{fig:bias-coef}
 \end{center}
 \end{figure}
 
@@ -357,59 +357,74 @@ First, small sample bias is much larger for the marginal effects than for the co
 For $N = 100$, the estimate of the marginal effect is biased by about -75\% for $x_1 = -3$, -50\% for $x_1 = -2$, and -25\% for $x_1 = -1$. 
 Second, the small sample bias in the estimates of the marginal effects descends to zero more slowly than the coefficient estimates.
 While the coefficient estimates are approximately unbiased for about $N = 250$, the estimates of the marginal effects retain substantial bias. 
-Indeed, the bias in the estimates of the marginal effects drops below the 3\% threshold at about $N = 2,500$---more than ten times the rule of thumb that works well for the coefficients. 
+Indeed, the bias in the estimates of the marginal effects drops below the 3\% threshold at about $N = 3,000$---more than ten times the rule of thumb that works well for the coefficients. 
 
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[width = \textwidth]{figs/bias-me.pdf}
-\caption{This figure shows the total, coefficient-induced, and transformation-induced $\tau$-bias for the marginal effects. The rule of thumb requiring ten events per explanatory variable suggests a minimum sample size of about 219. However, the bias falls well outside the three percent threshold for this suggested sample size. The estimates fall within the three percent threshold only for sample sizes nearing 2,500---more than ten times the rule of thumb that works well for the coefficients. Also notice that while the coefficient-induced bias receives the most attention from methodologists, the transformation-induced bias is \textit{much} larger.}\label{fig:bias-me}
+\caption{This figure shows the total, coefficient-induced, and transformation-induced $\tau$-bias for the marginal effects. The rule of thumb requiring ten events per explanatory variable suggests a minimum sample size of about 219. However, the bias falls well outside the three percent threshold for this suggested sample size. The estimates fall within the three percent threshold only for sample sizes nearing 3,000---more than ten times the rule of thumb that works well for the coefficients. Also notice that while the coefficient-induced bias receives the most attention from methodologists, the transformation-induced bias is \textit{much} larger.}\label{fig:bias-me}
 \end{center}
 \end{figure}
 
 \subsubsection*{An Actual Model}
 
-To further highlight the practical implications of transformation-induced $\tau$-bias, I use the coefficients reported for Model 1 in Table 1 of \citet[p. 84]{FearonLaitin2003} and their explanatory variables to conduct a second simulation. 
-Fearon and Laitin use a logit model to assess several hypotheses about the causes of civil war.
-Using their reported coefficients as the true model parameters and their explanatory variables the predictors (6,327 observations; 106 events; 11 explanatory variables), I repeatedly (1) simulate a new outcome variable, (2) estimate the logit model coefficients with ML, and (3) calculate the quantities of interest.
-For each observed case, I calculate the predicted probability of a civil war, the marginal effect of a change in per capita income, and the change in probability if per capita income increased by \$4,500 (about one standard deviation).
-Using these simulations, I calculate the total, coefficient-induced, and transformation-induced $\tau$-bias for the three quantities of interest. 
-Figure \ref{fig:fl} shows the total and decomposed $\tau$-bais.
+To further highlight the practical implications of transformation-induced $\tau$-bias, I use the explanatory variables and coefficients reported for Model 1 in Table 2 of \citet[p. 286]{Lacina2006} to conduct a second simulation. 
+Lacina uses a normal-linear regression model with a log-transformed outcome variable to assess several hypotheses about the causes of the number of battle deaths in civil conflicts.
+Using her reported coefficients as the true model parameters and her explanatory variables the predictors (105 complete observations; 9 explanatory variables), I repeatedly (1) simulate a new outcome variable, (2) re-estimate the regression model, and (3) calculate the quantities of interest.
+For each set of estimates $\hat{\beta}$ and $\hat{\sigma}^2$, I calculate two quantities of interest:
+\begin{enumerate}
+\item The expected number of battle deaths $E(\text{deaths}_i~|~X_i) = e^{X_i\hat{\beta} + \frac{\hat{\sigma}}{2}}$ for each observed case $X_i$.
+\item The first difference (i.e., the change in the expected number of battle deaths) $\Delta(\text{deaths}_i~|~X^{D}_i,~ X^{\sim D}_i)  = E(\text{deaths}_i~|~X^{D}_i) - E(\text{deaths}_i~|~X^{\sim D}_i) =  e^{X_i^{D}\hat{\beta} + \frac{\hat{\sigma}}{2}} - e^{X_i^{\sim D}\hat{\beta} + \frac{\hat{\sigma}}{2}}$ if each observed case $X_i$ were changed from a non-democracy $X^{\sim D}_i$ to a democracy $X^{D}_i$.
+\end{enumerate}
+Because the estimates of $\beta$ and $\sigma^2$ are unbiased, there is no coefficient-induced $\tau$-bias. 
+Indeed, the least squares estimate of $\beta$ is the best unbiased estimator under the assumed normal-linear model. 
+However, this ideal small-sample property does not apply to the quantities of interest.
+Figure \ref{fig:lacina} summarizes these simulations and demonstrates that transformation-induced $\tau$-bias can create considerable bias in the quantities of interest even when coefficient estimates have optimal properties.
 
-This example highlights that the relative importance of coefficient-induced $\tau$-bias and transformation-induced $\tau$-bias depends on the substantive problem.
-The top row of Figure \ref{fig:fl} shows that the coefficient-induced $\tau$-bias pushes the estimated predicted probabilities downard, while the transformation-induced $\tau$-bias pushes the estimate upward. 
-For most cases, the two biases roughly cancel, though for larger true probabilities, the transformation-induced bias tends to be larger, producing an upward bias in the predicted probabilities.
-The middle row of Figure \ref{fig:fl} shows that, for the marginal effects, the transformation-induced $\tau$-bias tends to overwhelm the coefficient-induced $\tau$-bias.
-The final row of Figure \ref{fig:fl} shows that the opposite holds for the first difference, where almost all of the total $\tau$-bias is due to bias in the estimates of the coefficients.
+The left panel of Figure \ref{fig:lacina} shows the true value and percent bias for the expected number of battle deaths $E(\text{deaths}) = e^{X\hat{\beta} + \frac{\hat{\sigma}^2}{2}}$. 
+Because the estimates $\hat{\beta}$ and $\hat{\sigma}^2$ are unbiased, there is no coefficient-induced $\tau$-bias in the expected value.
+However, there is a substantial upward bias in the expected value due to transformation-induced $\tau$-bias.
+The upward bias in the expected value ranges from 4\% (307 deaths) to 37\% (51,120 deaths).
+The average upward bias is 10\%---these are not trivial biases.
+
+The right panel of Figure \ref{fig:lacina} shows that these upward biases do not cancel for the first difference. 
+Indeed, transformation-induced $\tau$-bias leads to an overly optimistic estimate of the effect of democracy. 
+Lacina correctly notes that ``democracy is associated with fewer battle deaths'' (p. 287), but transformation-induced $\tau$-bias might lead researchers to over-estimate this pacifying effect by up to 10\% (and about 35\% in one extreme case) and 6\% on average.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width = \textwidth]{figs/fl.pdf}
-\caption{This figure shows the total, coefficient-induced, and transformation-induced $\tau$-bias for three quantities of interest. Each point represents a single observation from Fearon and Laitin's (\citeyear{FearonLaitin2003}) data set. For each observed case, I calculate the predicted probability of a civil war, the marginal effect of a change in per capita income, and the change in probability if per capita income increased by \$4,500 (about one standard deviation).}\label{fig:fl}
+\includegraphics[scale = .7]{figs/lacina.pdf}
+\caption{This figure shows the transformation-induced $\tau$-bias for two quantities of interest. Each point represents a single observation from Lacina's (\citeyear{Lacina2006}) data set. For each observation, I calculate the transformation-induced $\tau$-bias in the expected value---the expected number of battle deaths---and in the first difference---the change in the expected number of deaths if each case was changed from a non-democracy to a democracy.}\label{fig:lacina}
 \end{center}
 \end{figure}
 
 \subsection*{The Implications}
 
 Quantities of interest do not inherit the small sample properties of the coefficient estimates. 
-This fact has important implications for how we study the small sample properties of estimators. 
+This fact has important implications for how we evaluate the small sample properties of estimators. 
 
 First, $\tau$-bias has important implications for the sample sizes that methodologists recommend to substantive researchers. 
 Methodologists usually parameterize models so that the coefficients lie in an unbounded space. 
 This allows the coefficient estimates to rapidly approach their asymptotic distribution, which ensures the estimates have acceptable small sample properties. 
 Substantive researchers, though, usually transform these coefficient estimates into a quantity of interest, which, because it often lies in a bounded space, might approach its asymptotic distribution more slowly. 
-As a result, substantive researchers might need much larger sample sizes than methodologists usually recommend. Methodologists must remain conscientious of the quantities of interest to substantive researchers and assess the performance of their estimators in terms of these quantities.
+As a result, substantive researchers might need much larger sample sizes than methodologists usually recommend. 
+Methodologists must remain conscientious of the quantities of interest to substantive researchers and assess the performance of their estimators in terms of these quantities.
+Unfortunately, it remains impossible or difficult to assess the bias in general or for a wide range of sample sizes, quantities of interest, or parameter values.
+
+But substantive researchers must also remain aware of the potential to introduce bias into estimates by transforming coefficient estimates. 
+Fortunately, substantive researchers can use Monte Carlo simulations to quickly assess the potential for bias in a specific substantive context in which researchers know the sample size, quantity of interest, and likely parameter values. 
 
 Secondly, $\tau$-bias has important implications for the bias-variance tradeoff in choosing an estimator. 
 Methodologists usually recognize a tradeoff between bias and variance in estimating parameters. 
 Actions intended to remove bias might increase variance and vice versa.
-However, the approximation to the transformation-induced bias given in Equation \ref{eqn:bias} points out an important result. 
+However, the approximation to the transformation-induced $\tau$-bias given in Equation \ref{eqn:bias} points out an important result. 
 Greater variance in the coefficient estimates might lead to increased bias in the quantities of interest. 
 This implies that if an estimator is essentially unbiased, then greater efficiency translates to reduced bias in the quantities of interest. 
-Similarly, small reductions in bias at the expense of large loss in efficiency might lead to greater bias in the quantities of interest. 
+Similarly, small reductions in bias at the expense of a large increase in variance might lead to greater bias in the quantities of interest. 
 For example, refinements of the usual logit model intended to \textit{reduce} bias in the coefficients, such as heteroskedastic probit or scobit, might actually \textit{increase} bias in the quantities of interest. 
-Methodologists must be aware of this tradeoff when recommending more sophisticated complex estimators to substantive researchers and comparing alternative estimators.
+Methodologists must be aware of this tradeoff when recommending more complex estimators to substantive researchers and comparing alternative estimators.
 
-As methodologists, we cannot ignore transformation induced bias. Nearly unbiased estimates of coefficients are not enough. We must be aware of the quantities of interest to substantive researchers and calibrate our tools for these quantities.
+Methodologists cannot ignore transformation-induced bias. Substantive researchers must not assume that sample size recommendations remain valid for any quantity of interest. Nearly unbiased estimates of coefficients are not enough. We must remain thoughtful about our quantities of interest and calibrate our tools for these quantities.
 
 
 
